@@ -1,0 +1,176 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage[a4paper,top=1.6cm,bottom=1.6cm,left=1.7cm,right=1.7cm]{geometry}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{tcolorbox}
+\usepackage{needspace}
+
+\definecolor{azulmls}{RGB}{20,70,110}
+\definecolor{cinzatexto}{RGB}{60,60,60}
+\definecolor{verdeF}{RGB}{30,120,70}
+\definecolor{laranjaH}{RGB}{190,110,30}
+\definecolor{vermelhoL}{RGB}{180,60,50}
+
+\hypersetup{colorlinks=true, linkcolor=azulmls, urlcolor=azulmls}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\lhead{\footnotesize\color{cinzatexto} MLS 2026.2 \textperiodcentered{} Projeto aplicado de extensão}
+\rhead{\footnotesize\color{cinzatexto} Entrega 3 \textperiodcentered{} Escuta e Canvas de ML}
+\cfoot{\footnotesize\color{cinzatexto}\thepage}
+
+\titleformat{\section}{\large\bfseries\color{azulmls}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{azulmls}}{}{0em}{}
+\titlespacing*{\section}{0pt}{7pt}{3pt}
+\titlespacing*{\subsection}{0pt}{5pt}{2pt}
+
+\setlength{\parskip}{3pt}
+\setlist[itemize]{leftmargin=1.4em, itemsep=1pt, topsep=1pt}
+\setlist[enumerate]{leftmargin=1.6em, itemsep=1.5pt, topsep=1pt}
+
+\newcolumntype{L}{>{\raggedright\arraybackslash\bfseries}p{3.3cm}}
+\newcommand{\campo}[2]{\textbf{#1} & #2 \\ \addlinespace[2pt]}
+
+\newcommand{\F}{\textbf{\textcolor{verdeF}{[F]}}}
+\newcommand{\Hh}{\textbf{\textcolor{laranjaH}{[H]}}}
+\newcommand{\Ll}{\textbf{\textcolor{vermelhoL}{[L]}}}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE\bfseries\color{azulmls} Escuta do demandante e Canvas de ML}\\[3pt]
+    {\large Entrega 3 --- Aprendizagem de Máquina Supervisionada}\\[2pt]
+    {\normalsize UFPB \textperiodcentered{} CCSA \textperiodcentered{} Ciência de Dados para Negócios \textperiodcentered{} 2026.2}
+\end{center}
+
+\vspace{3pt}
+\hrule
+\vspace{6pt}
+
+\section{Identificação}
+\begin{tabularx}{\textwidth}{@{}L X@{}}
+\campo{Equipe}{Equipe F}
+\campo{Integrantes}{Brenno Henrique Alves da Silva Costa; Gustavo Henrique Rocha Oliveira; Iasmin Vieira de Lima}
+\campo{Data}{8 de outubro de 2026}
+\campo{Demandante}{Hospital Universitário Lauro Wanderley (HU-UFPB / Ebserh), Farmácia Hospitalar. Interlocutora: responsável pela farmácia (escuta conduzida com apoio do professor).}
+\campo{Repositório}{\url{https://github.com/brennohdev/mls-2026.2-desabastecimento-sus}}
+\end{tabularx}
+
+\begin{tcolorbox}[colback=azulmls!6, colframe=azulmls!50, boxrule=0.5pt, arc=2pt, left=6pt, right=6pt, top=4pt, bottom=4pt]
+\footnotesize \textbf{Mudança de recorte após a escuta.} Entramos no projeto com o tema de desabastecimento de medicamentos. Na escuta, a responsável informou que o desabastecimento geral já está relativamente controlado e apontou como \textbf{foco principal} o \textbf{controle de antimicrobianos}: garantir que cada paciente complete seu tratamento sem ruptura, hoje feito em planilha manual. Reorientamos o recorte para esse problema, que é o que a demandante efetivamente pediu.
+\end{tcolorbox}
+
+% ============================================================
+\section{Preparação e condução da escuta}
+
+\textbf{Recorte da equipe.} Previsão de demanda de antimicrobianos a partir dos tratamentos ativos, para apoiar a decisão de reposição e evitar ruptura no meio do tratamento. Não tratamos de logística interna de distribuição nem de farmácia clínica.
+
+\textbf{Papéis na escuta.} Gustavo e Iasmin conduziram a escuta presencial no HU, com apoio do professor; Iasmin registrou; Brenno consolidou a memória e o Canvas a partir das notas e dos dados recebidos.
+
+\textbf{Consentimento e ética.} A conversa não foi gravada. Registramos de forma objetiva, sem nomes de pacientes nem documentos internos sensíveis. Os dados recebidos (planilhas) serão tratados apenas para fins acadêmicos.
+
+% ============================================================
+\section{Roteiro de perguntas (não indutivas)}
+
+Roteiro preparado para a escuta, cada pergunta ligada a um campo do Canvas. Na prática, a interlocutora conduziu grande parte da conversa de forma espontânea; registramos abaixo o roteiro e, na memória, o que foi efetivamente respondido e o que ficou como lacuna.
+
+\begin{enumerate}
+    \item \textbf{Decisão/cadência.} ``Me conte como funciona hoje, do início ao fim, o acompanhamento de um antimicrobiano desde a prescrição até a reposição.''
+    \item \textbf{Baseline.} ``Quando vários itens precisam ser repostos ao mesmo tempo, como vocês decidem a ordem?''
+    \item \textbf{Alvo.} ``O que fica registrado quando um tratamento é aberto e quando ele termina? Onde isso é guardado?''
+    \item \textbf{Horizonte.} ``Entre pedir a reposição e o item chegar de fato, quanto tempo costuma passar?''
+    \item \textbf{Capacidade (k).} ``Quantos itens ou tratamentos a equipe acompanha de perto por período?''
+    \item \textbf{Variáveis disponíveis.} ``No momento de decidir a reposição, que informações já estão na planilha e no sistema?''
+    \item \textbf{Custos dos erros.} ``O que é pior: sobrar um antimicrobiano que não foi usado ou faltar no meio de um tratamento?''
+    \item \textbf{Riscos/usos vedados.} ``Que uso de uma previsão dessas seria inaceitável ou perigoso para o hospital?''
+\end{enumerate}
+
+% ============================================================
+\section{Memória da escuta}
+
+\textbf{1. Dados do encontro.} Escuta presencial no HU-UFPB, em outubro de 2026, com a responsável pela Farmácia Hospitalar, conduzida por Gustavo e Iasmin com apoio do professor. Duração aproximada: 1 hora. A interlocutora conduziu boa parte da conversa espontaneamente, o que fez o roteiro ser seguido apenas parcialmente.
+
+\textbf{2. Processo decisório, nas palavras da demandante (paráfrase).} O controle de antimicrobianos é o foco atual. Cada tratamento é registrado em uma planilha, atualizada ao menos uma vez por dia, com paciente, medicamento, dia de início, dia de término e quantidade de ampolas; a planilha puxa a posição de estoque do AGHU (chamado internamente de ``GHU''). A abertura de tratamento com antimicrobiano exige prescrição específica, que passa por um fluxo com a CCIH via sistema GLPI. O ressuprimento é planejado pela Central de Abastecimento Farmacêutico (CAF), com compras a cada três meses e pedidos feitos às segundas, quartas e sextas. O fluxo operacional é: estoque no AGHU $\rightarrow$ planilha Excel $\rightarrow$ pedido à CAF.
+
+\textbf{3. Fatos, hipóteses e inferências.}
+\begin{itemize}
+    \item \F{} Existe planilha diária de tratamento de pacientes com antimicrobiano (paciente, medicamento, início, término, quantidade de ampolas), que cruza com a posição de estoque do AGHU. Registrado na escuta e verificado nos dados recebidos.
+    \item \F{} O ressuprimento é planejado pela CAF, com ciclo de compra trimestral e pedidos em dias fixos (seg/qua/sex). Relatado na escuta.
+    \item \F{} Há cerca de 480 medicamentos acompanhados; antimicrobianos são um subconjunto tratado à parte. Relatado na escuta.
+    \item \F{} A demandante mencionou existir sazonalidade no consumo. Relatado na escuta.
+    \item \Hh{} O consumo de antimicrobianos é previsível a partir dos tratamentos ativos (início, duração, ampolas/dia) somados à demanda de novos tratamentos.
+    \item \Ll{} Dor declarada a confirmar: quando um item está em ruptura, o sistema não o reconhece como necessidade de consumo, o que distorce o pedido. Precisa ser detalhado.
+\end{itemize}
+
+\textbf{4. Restrições mencionadas.} Trabalho manual em Excel; ciclo de compra trimestral da CAF (pouca flexibilidade); necessidade de garantir o tratamento completo (não pode faltar no meio); manipulados têm validade curta (3 a 6 meses) e usam ``carta de troca'' ao vencer.
+
+\textbf{5. Lacunas a confirmar.} Capacidade $k$ exata; tempo médio real de reposição; como a ruptura é (ou não) registrada de forma extraível; definição precisa do alvo; assimetria de custo entre sobra e falta.
+
+\textbf{6. Próximos passos combinados.}
+
+\begin{tabularx}{\textwidth}{@{}X >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{1.6cm}@{}}
+\toprule
+\textbf{Ação} & \textbf{Responsável} & \textbf{Prazo} \\
+\midrule
+Auditar as planilhas recebidas e montar a base analítica & Brenno & 22/10 \\
+Enviar a memória à demandante e confirmar as lacunas & Iasmin & 15/10 \\
+Alinhar com a CAF/CCIH o fluxo e o registro de ruptura & Gustavo & 20/10 \\
+\bottomrule
+\end{tabularx}
+
+\textbf{7. Devolutiva.} A memória será enviada à responsável pela farmácia para validação dos pontos registrados.
+
+% ============================================================
+\needspace{6\baselineskip}
+\section{Canvas de ML}
+
+Cada campo marcado como \F{} fato registrado na escuta, \Hh{} hipótese da equipe ou \Ll{} lacuna a resolver.
+
+\begin{tabularx}{\textwidth}{@{}L X@{}}
+\toprule
+\campo{Demandante e usuário}{\F{} Demandante: Farmácia do HU-UFPB. Usuário: equipe da farmácia que acompanha os antimicrobianos e decide a reposição.}
+\campo{Decisão e cadência}{\F{}/\Hh{} Decidir reposição de antimicrobianos para não faltar no meio do tratamento; acompanhamento diário da planilha, pedidos à CAF em dias fixos (seg/qua/sex).}
+\campo{Restrição de capacidade (k)}{\Ll{} Número de itens/tratamentos acompanhados de perto por período; ciclo de compra da CAF é trimestral. Valor exato a confirmar.}
+\campo{Problema e relevância}{\F{} Garantir o tratamento completo com antimicrobiano é crítico (interrupção gera risco ao paciente e resistência); hoje o controle é manual em Excel. Relatado na escuta.}
+\campo{Unidade de análise}{\Hh{} Medicamento antimicrobiano $\times$ dia (ou semana), podendo agregar por setor. A validar com os dados.}
+\campo{População e recortes}{\Hh{} Antimicrobianos controlados pela farmácia; tratamentos ativos nos setores (ex.: clínica médica, cirúrgica, DIP). Exclui demais classes.}
+\campo{Variável-alvo}{\Hh{}/\Ll{} Demanda (consumo) de cada antimicrobiano no período seguinte, ou risco de ruptura no meio de tratamento. Definição operacional a fechar com os dados.}
+\campo{Horizonte e corte}{\Hh{} Prever a demanda do próximo período (dias a semanas) compatível com o tempo de reposição; treinar com dados até o corte, prever à frente, sem vazamento.}
+\campo{Variáveis disponíveis}{\F{}/\Hh{} Da planilha e do AGHU: medicamento, início/término do tratamento, ampolas/dia, saldo de estoque, setor; sazonalidade mencionada.}
+\campo{Baseline operacional}{\Hh{} Reposição guiada por saldo de estoque, ponto de pedido e julgamento da equipe, mais o ciclo trimestral da CAF. A confirmar com quem executa.}
+\campo{Custos dos erros (B e C)}{\Ll{} Faltar no meio do tratamento (grave: risco clínico e resistência) tende a custar mais que sobrar; manipulados têm validade curta, o que encarece a sobra. Assimetria a quantificar.}
+\campo{Métrica de sucesso}{\Hh{} Técnica: erro de previsão de demanda (ex.: MAE) ou recall de ruptura. Utilidade: tratamentos sem interrupção por falta.}
+\campo{Explicabilidade}{\Hh{} A equipe precisa ver por que a demanda prevista subiu (tratamentos ativos, novos casos, sazonalidade), não só o número.}
+\campo{Riscos e LGPD}{\Hh{} A planilha contém nome de paciente: dado pessoal/sensível. Só usaríamos dados anonimizados/agregados. Uso vedado: decidir compra ou suspender tratamento no automático sem revisão humana.}
+\campo{Dúvidas críticas}{\Ll{} (1) alvo: demanda contínua ou risco de ruptura? (2) granularidade (dia/semana, item/setor)? (3) capacidade $k$ e tempo de reposição reais? (4) como a ruptura fica registrada?}
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Verificação individual}
+
+\textbf{Brenno.} \emph{Pergunta:} ``O que fica registrado quando um tratamento com antimicrobiano é aberto e quando ele termina, e onde isso é guardado?'' \emph{Por que não é indutiva:} pergunta pelo registro existente (o alvo), sem sugerir solução nem pressupor um sistema. \emph{Classificação:} Variável-alvo = \Ll{}, pois ainda não fechamos se o alvo é demanda contínua ou risco de ruptura; fonte: escuta + planilhas recebidas, pendentes de auditoria.
+
+\textbf{Gustavo.} \emph{Pergunta:} ``Quando é necessário repor vários medicamentos ao mesmo tempo, como a equipe define quais serão atendidos primeiro?'' \emph{Por que não é indutiva:} deixa a equipe explicar os critérios reais sem sugerir uma ordem ideal. \emph{Classificação:} Baseline operacional = \Hh{}, pois a reposição parece guiada por saldo, ponto de pedido e ciclo da CAF; fonte: relato na escuta, a confirmar com quem executa.
+
+\textbf{Iasmin.} \emph{Pergunta:} ``Entre perceber que um item vai faltar e conseguir repor de fato, quanto tempo costuma passar?'' \emph{Por que não é indutiva:} pergunta o tempo real do processo sem sugerir que seja curto ou longo. \emph{Classificação:} Horizonte e corte = \Ll{}, pois o tempo de reposição e o ciclo da CAF ainda não foram quantificados com precisão; fonte: escuta, pendente de confirmação.
+
+% ============================================================
+\section*{Uso de IA generativa}
+Declaramos o uso de um assistente de IA para apoio à organização da memória da escuta a partir das notas da equipe, à estruturação do Canvas e à revisão de redação. O recorte, as perguntas e as classificações são da equipe; nenhum dado pessoal de paciente foi inserido em serviço externo.
+
+\end{document}

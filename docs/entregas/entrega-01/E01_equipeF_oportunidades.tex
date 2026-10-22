@@ -1,0 +1,179 @@
+\documentclass[11pt,a4paper]{article}
+
+% ------- pacotes -------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage[a4paper,margin=1.7cm]{geometry}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\definecolor{azulmls}{RGB}{20,70,110}
+\definecolor{cinzatexto}{RGB}{60,60,60}
+
+\hypersetup{colorlinks=true, linkcolor=azulmls, urlcolor=azulmls}
+
+% cabecalho/rodape discretos
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\lhead{\footnotesize\color{cinzatexto} MLS 2026.2 \textperiodcentered{} Projeto aplicado de extensão}
+\rhead{\footnotesize\color{cinzatexto} Entrega 1 \textperiodcentered{} Mapa de oportunidades}
+\cfoot{\footnotesize\color{cinzatexto}\thepage}
+
+% titulos de secao
+\titleformat{\section}{\large\bfseries\color{azulmls}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{azulmls}}{}{0em}{}
+\titlespacing*{\section}{0pt}{7pt}{3pt}
+\titlespacing*{\subsection}{0pt}{6pt}{2pt}
+
+% espacamento entre paragrafos mais justo
+\setlength{\parskip}{4pt}
+
+% coluna de rótulo para as fichas
+\newcolumntype{L}{>{\raggedright\arraybackslash\bfseries}p{3.4cm}}
+\newcommand{\campo}[2]{\textbf{#1} & #2 \\ \addlinespace[1pt]}
+
+\setlist[itemize]{leftmargin=1.4em, itemsep=1pt, topsep=2pt}
+\setlist[enumerate]{leftmargin=1.6em, itemsep=1pt, topsep=2pt}
+
+% ============================================================
+\begin{document}
+
+% ------- cabecalho do documento -------
+\begin{center}
+    {\LARGE\bfseries\color{azulmls} Mapa de oportunidades e prospecção}\\[3pt]
+    {\large Entrega 1 --- Aprendizagem de Máquina Supervisionada}\\[2pt]
+    {\normalsize UFPB \textperiodcentered{} CCSA \textperiodcentered{} Ciência de Dados para Negócios \textperiodcentered{} 2026.2}
+\end{center}
+
+\vspace{4pt}
+\hrule
+\vspace{6pt}
+
+% ============================================================
+\section{Identificação}
+
+\begin{tabularx}{\textwidth}{@{}L X@{}}
+\campo{Equipe}{Equipe F}
+\campo{Integrantes}{Brenno Henrique Alves da Silva Costa; Gustavo Henrique Rocha Oliveira; Iasmin Vieira de Lima}
+\campo{Data}{10 de setembro de 2026}
+\campo{Repositório}{\url{https://github.com/brennohdev/mls-2026.2-desabastecimento-sus}}
+\end{tabularx}
+
+Trazemos duas oportunidades. Nascem de lugares diferentes, uma rede pública de saúde e uma empresa de software privada, mas foram escolhidas por compartilharem a mesma estrutura de decisão: alguém precisa agir cedo, com recurso limitado, e uma previsão bem colocada indica \emph{onde} vale a pena agir primeiro. Antes de escrever, fizemos uma verificação técnica preliminar dos dados de cada uma; relatamos o que confirmamos e o que ainda precisa ser validado na escuta.
+
+% ============================================================
+\section{Ficha de oportunidade 1 --- Desabastecimento de medicamentos no SUS}
+
+\begin{tabularx}{\textwidth}{@{}L X@{}}
+\toprule
+\campo{Organização}{Secretaria de Saúde (estadual ou municipal), setor público, gestão da assistência farmacêutica. Referência de dados: SIA/DATASUS.}
+\campo{Contato}{A definir na triagem. A prospecção usa exclusivamente dados abertos; o contato institucional caberá ao professor.}
+\campo{Problema percebido}{O elenco de medicamentos entregue pelo SUS entra em ruptura de tempos em tempos: o item acaba e o paciente crônico fica sem tratamento. O oposto também custa: comprar demais leva a vencimento e desperdício de recurso público. O tema ganhou destaque nacional em 2026, com relatos de falta de itens básicos e um projeto de lei propondo monitorar e prever a disponibilidade de medicamentos.}
+\campo{Usuário e decisão}{O gestor da assistência farmacêutica. Com um sinal antecipado de risco, ele decide o que priorizar na próxima aquisição, quando antecipar uma compra e o que remanejar entre unidades, em vez de reagir quando a prateleira já está vazia.}
+\campo{Restrição}{Orçamento fechado, prazo lento de licitação e uma equipe pequena para acompanhar centenas de itens ao mesmo tempo.}
+\campo{Unidade candidata}{Medicamento $\times$ mês, no nível estadual. A dispensação do Componente Especializado se concentra em poucos polos, então a granularidade por município não se sustenta, e foi honesto descobrir isso antes, e não depois.}
+\campo{Alvo histórico candidato}{Ruptura no período seguinte, definida como queda abrupta da quantidade dispensada frente à média recente do próprio item. É um resultado observável no histórico.}
+\campo{Horizonte}{Um mês à frente, tempo compatível com o prazo que uma ação de compra ou remanejamento leva para surtir efeito.}
+\campo{Dados possíveis}{SIA/SUS (Produção Ambulatorial, grupo 06 do SIGTAP), aberto e sem cadastro. Confirmamos o acesso: baixamos 35 competências da Paraíba (2022--2024), com cerca de 210 medicamentos formando séries contínuas.}
+\campo{Baseline atual}{Repor pela média dos últimos meses, ou simplesmente reagir quando o estoque zera. É a régua que o modelo precisa superar.}
+\campo{Benefício e risco}{Benefício: menos paciente sem remédio e menos desperdício por vencimento. Risco de uso indevido: tratar a previsão como verdade e cortar compras no automático. A decisão precisa continuar humana.}
+\campo{Dúvida crítica}{A dispensação é demanda \emph{atendida}, não estoque. Uma queda pode significar ``faltou o remédio'' ou ``menos gente precisou''. Separar os dois casos, idealmente cruzando com dado de estoque da Secretaria, é o que precisamos validar na escuta.}
+\bottomrule
+\end{tabularx}
+
+\textit{Nota de viabilidade.} A série tem memória temporal razoável (autocorrelação de um mês na casa de 0{,}43 na maioria dos itens) e o evento de ruptura aparece em torno de 11\% dos pontos, desbalanceado o suficiente para ser interessante, sem ser raro a ponto de inviabilizar. Isso sustenta um baseline honesto e modelos clássicos dentro do semestre.
+
+% ============================================================
+\section{Ficha de oportunidade 2 --- Demanda de manutenção (work orders) na Livvie}
+
+\begin{tabularx}{\textwidth}{@{}L X@{}}
+\toprule
+\campo{Organização}{Livvie, empresa de software para administração, planejamento e controle de condomínios de alto padrão (Miami, EUA). Setor de tecnologia (SaaS).}
+\campo{Contato}{Um dos integrantes atua na empresa, o que dá uma relação real de acesso. Nenhum contato formal ou promessa será feito nesta etapa; qualquer alinhamento passa pela triagem do professor.}
+\campo{Problema percebido}{A manutenção do condomínio costuma ser reativa: a equipe conserta depois que o problema aparece, o que gera fila, urgência e custo maior. As ordens de serviço já ficam registradas no sistema, com categoria e recorrência, mas esse histórico ainda não é usado para antecipar o que vem pela frente.}
+\campo{Usuário e decisão}{O gestor de manutenção ou o síndico. Com uma estimativa de onde a demanda de chamados deve crescer, ele decide o que priorizar e o que fazer de forma preventiva, em vez de só apagar incêndio.}
+\campo{Restrição}{Equipe de manutenção limitada e orçamento do condomínio apertado, não dá para atender tudo ao mesmo tempo.}
+\campo{Unidade candidata}{Área comum ou categoria de serviço $\times$ mês, por condomínio.}
+\campo{Alvo histórico candidato}{Volume (ou ocorrência) de ordens de serviço no período seguinte. É um resultado observável: as work orders já estão registradas, com classe e recorrência.}
+\campo{Horizonte}{Um mês à frente, tempo suficiente para organizar equipe e insumos de forma preventiva.}
+\campo{Dados possíveis}{Dados proprietários do produto: o histórico de work orders (dezenas de milhares de registros), com categorização, recorrência e vínculo com áreas comuns. Há também dados de uso do condomínio que podem entrar como contexto.}
+\campo{Baseline atual}{Manutenção reativa, ou no máximo uma rotina fixa de preventiva que não olha o histórico. O modelo precisa superar essa régua.}
+\campo{Benefício e risco}{Benefício: menos manutenção de emergência, melhor uso da equipe e menos transtorno para o morador. Risco: confiar demais na previsão e negligenciar um problema fora do padrão previsto.}
+\campo{Dúvida crítica}{Confirmar com a empresa a viabilidade de acesso e uso dos dados para fins acadêmicos, e checar se o volume de work orders por área é suficiente para prever no nível de detalhe pretendido.}
+\bottomrule
+\end{tabularx}
+
+\textit{Nota de ética e dados.} O trabalho se apoia em registros operacionais de manutenção, não em dados pessoais de moradores, o que mantém o escopo proporcional e de baixo risco. Como envolve base privada e internacional, tratamos acesso e finalidade como ponto a validar, sem qualquer compromisso assumido nesta fase.
+
+% ============================================================
+\section{Priorização}
+
+\textbf{Oportunidade priorizada: desabastecimento de medicamentos no SUS.}
+
+As duas propostas têm boa formulação, mas a de medicamentos é a que anda sozinha desde já. Os dados são abertos e não dependem da autorização de ninguém: nós baixamos, lemos e verificamos 35 meses reais antes de escrever esta ficha, então o risco de ficarmos sem base no meio do semestre é baixo. Some-se a isso a relevância social evidente em 2026 e o fato de ser um problema pouco explorado no contexto do SUS. A oportunidade da Livvie (manutenção) é forte e tem acesso real por meio de um integrante, mas seu uso acadêmico ainda depende de aval da empresa, o que hoje é uma incerteza maior. Por isso ela segue como segunda opção, valiosa caso a escuta confirme a liberação. \textbf{Próximo passo proposto:} definir com a Secretaria o corte entre ruptura de oferta e queda de demanda.
+
+% ============================================================
+\section*{Uso de IA generativa}
+\addcontentsline{toc}{section}{Uso de IA generativa}
+
+Declaramos, conforme exigido, o uso de um assistente de IA em dois momentos: (i) revisão de redação deste documento; e (ii) apoio técnico para montar rapidamente um script de análise exploratória (EDA) com dados abertos de saúde. As decisões de escopo, a escolha das oportunidades e a priorização são da equipe, e nenhum dado sigiloso ou pessoal foi inserido em serviço externo.\label{fimcorpo}
+
+% ============================================================
+% ============== ANEXOS: FICHAS INDIVIDUAIS ==================
+% ============================================================
+\newpage
+\begin{center}
+    {\large\bfseries\color{azulmls} Anexo --- Fichas individuais}
+\end{center}
+
+Cada ficha abaixo é de autoria e defesa individual, conforme a verificação prevista no Guia.
+
+% ---------- FICHA INDIVIDUAL 1 ----------
+\subsection*{Ficha individual --- Brenno Henrique Alves da Silva Costa}
+\textbf{Oportunidade:} Desabastecimento de medicamentos no SUS.
+
+\textbf{Por que me interessa.} Passei as últimas semanas indo bastante a hospital público e uma coisa me marcou: uma médica me disse que só ia me passar um soro na veia porque não sabia se tinha mais. Aquilo ficou na minha cabeça. Não era descaso dela, era ela decidindo no escuro, sem saber o que tinha no estoque. Quando vi que dava pra atacar exatamente esse tipo de decisão com dado, quis fazer. Cheguei até a baixar os dados do SIA/DATASUS pra ver se a ideia parava em pé antes de vir defender aqui.
+
+\textbf{Decisão que muda:} priorizar compra e remanejamento de estoque a partir de um risco de ruptura antecipado.\\
+\textbf{Alvo observável:} queda abrupta da dispensação de um medicamento frente à sua média recente.\\
+\textbf{Risco de uso indevido:} cortar compras no automático confiando cegamente no modelo, deixando pacientes sem medicamento.
+
+\textit{Formulação em uma frase:} Para cada \textbf{medicamento} em \textbf{um estado do SUS}, no momento do \textbf{fechamento mensal}, estimar o \textbf{risco de ruptura de abastecimento} durante o \textbf{mês seguinte}, usando o \textbf{histórico de dispensação e as características do item disponíveis até o corte}, para apoiar a \textbf{decisão de priorização de compra e remanejamento} do \textbf{gestor da assistência farmacêutica}, sujeito à \textbf{restrição de orçamento e prazo de aquisição}.
+
+\vspace{6pt}
+% ---------- FICHA INDIVIDUAL 2 ----------
+\subsection*{Ficha individual --- Gustavo Henrique Rocha Oliveira}
+\textbf{Oportunidade:} Desabastecimento de medicamentos no SUS.
+
+\textbf{Por que me interessa.} O que me puxou foi o lado de série temporal mesmo. Eu queria pegar um problema em que o tempo importa de verdade, em que você olha o passado de um dado e tenta antecipar o próximo passo, e prever quando um remédio vai começar a faltar é exatamente isso. Tem o lado social também, claro, mas o que me deixou curioso foi o desafio de transformar esse histórico numa lista de alerta que faça sentido pra quem tá na ponta.
+
+\textbf{Decisão que muda:} montar a lista de vigilância do mês, ou seja, quais medicamentos entram no acompanhamento próximo da equipe, com checagem de estoque mais frequente e alerta ao prescritor.\\
+\textbf{Alvo observável:} o medicamento vai virar alerta (risco de ruptura) no próximo mês, marcado sim/não a partir do histórico de dispensação.\\
+\textbf{Risco de uso indevido:} gerar alerta demais e cansar a equipe, que passa a ignorar o sistema, ou o contrário, calibrar tão conservador que os casos reais escapam.
+
+\textit{Formulação em uma frase:} Para cada \textbf{medicamento} em \textbf{um estado do SUS}, no momento do \textbf{fechamento mensal}, classificar se ele deve \textbf{entrar em alerta de risco de ruptura} no \textbf{mês seguinte}, usando o \textbf{histórico de dispensação disponível até o corte}, para apoiar a \textbf{decisão de quais itens colocar em vigilância} da \textbf{equipe de assistência farmacêutica}, sujeito à \textbf{restrição de quantos itens a equipe consegue acompanhar de perto}.
+
+\vspace{6pt}
+% ---------- FICHA INDIVIDUAL 3 ----------
+\subsection*{Ficha individual --- Iasmin Vieira de Lima}
+\textbf{Oportunidade:} Demanda de manutenção (work orders) na Livvie.
+
+\textbf{Por que me interessa.} Quem já morou em prédio sabe como é: as coisas quebram, entra na fila e demora, e no fim tudo vira urgência. Achei interessante que dá pra atacar isso com dado, porque o histórico de chamados já existe e ninguém usa pra antecipar nada. Um colega da equipe trabalha numa empresa que tem exatamente esse tipo de registro, então resolvi pegar essa oportunidade pra estudar como transformar esse histórico numa previsão de demanda que ajude a manutenção a se organizar antes.
+
+\textbf{Decisão que muda:} priorizar manutenção preventiva nas áreas com maior demanda prevista, em vez de só reagir.\\
+\textbf{Alvo observável:} volume de ordens de serviço por área no período seguinte.\\
+\textbf{Risco de uso indevido:} confiar demais na previsão e deixar passar um problema fora do padrão.
+
+\textit{Formulação em uma frase:} Para cada \textbf{área comum ou categoria de serviço} em \textbf{um condomínio da base da Livvie}, no momento do \textbf{fechamento mensal}, estimar a \textbf{demanda de ordens de serviço} durante o \textbf{mês seguinte}, usando o \textbf{histórico de chamados e sua recorrência disponíveis até o corte}, para apoiar a \textbf{decisão de priorização de manutenção preventiva} do \textbf{gestor de manutenção}, sujeito à \textbf{restrição de equipe e orçamento}.
+
+\end{document}

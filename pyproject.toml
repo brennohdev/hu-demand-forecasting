@@ -1,0 +1,37 @@
+[project]
+name = "huforecast"
+version = "0.1.0"
+description = "Antimicrobial demand forecasting for the pharmacy of HU-UFPB (MLS 2026.2)."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Brenno Henrique Alves da Silva Costa" },
+    { name = "Gustavo Henrique Rocha Oliveira" },
+    { name = "Iasmin Vieira de Lima" },
+]
+dependencies = [
+    "pandas==2.3.3",
+    "numpy==2.4.3",
+    "openpyxl==3.1.5",
+    "pyarrow==23.0.1",
+    "matplotlib==3.10.9",
+    "scikit-learn==1.8.0",
+]
+
+[project.optional-dependencies]
+notebook = [
+    "jupyter",
+    "jupytext",
+    "nbconvert",
+    "ipykernel",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/huforecast"]
+
+[tool.uv]
+package = true

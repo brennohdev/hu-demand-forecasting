@@ -1,0 +1,182 @@
+\documentclass[11pt,a4paper]{article}
+
+% ------- pacotes -------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage[a4paper,margin=1.7cm]{geometry}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{xurl}
+
+\definecolor{azulmls}{RGB}{20,70,110}
+\definecolor{cinzatexto}{RGB}{60,60,60}
+
+\hypersetup{colorlinks=true, linkcolor=azulmls, urlcolor=azulmls}
+
+% cabecalho/rodape discretos
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\lhead{\footnotesize\color{cinzatexto} MLS 2026.2 \textperiodcentered{} Projeto aplicado de extensão}
+\rhead{\footnotesize\color{cinzatexto} Entrega 2 \textperiodcentered{} Clínica de Projetos}
+\cfoot{\footnotesize\color{cinzatexto}\thepage}
+
+% titulos de secao
+\titleformat{\section}{\large\bfseries\color{azulmls}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{azulmls}}{}{0em}{}
+\titlespacing*{\section}{0pt}{7pt}{3pt}
+\titlespacing*{\subsection}{0pt}{6pt}{2pt}
+
+\setlength{\parskip}{4pt}
+
+% coluna de rótulo para as fichas
+\newcolumntype{L}{>{\raggedright\arraybackslash\bfseries}p{3.3cm}}
+\newcommand{\campo}[2]{\textbf{#1} & #2 \\ \addlinespace[1pt]}
+
+\setlist[itemize]{leftmargin=1.4em, itemsep=1pt, topsep=2pt}
+\setlist[enumerate]{leftmargin=1.6em, itemsep=1pt, topsep=2pt}
+
+% marcadores de status (fato / hipotese / lacuna)
+\newcommand{\fato}{\textcolor{azulmls}{\footnotesize[fato]}}
+\newcommand{\hip}{\textcolor{cinzatexto}{\footnotesize[hipótese]}}
+\newcommand{\lac}{\textcolor{cinzatexto}{\footnotesize[lacuna]}}
+
+% ============================================================
+\begin{document}
+
+% ------- cabecalho do documento -------
+\begin{center}
+    {\LARGE\bfseries\color{azulmls} Clínica de Projetos}\\[3pt]
+    {\large Entrega 2 --- Seleção do demandante e validação da oportunidade}\\[2pt]
+    {\normalsize UFPB \textperiodcentered{} CCSA \textperiodcentered{} Ciência de Dados para Negócios \textperiodcentered{} 2026.2}
+\end{center}
+
+\vspace{4pt}
+\hrule
+\vspace{6pt}
+
+% ============================================================
+\section{Identificação}
+
+\begin{tabularx}{\textwidth}{@{}L X@{}}
+\campo{Equipe}{Equipe F}
+\campo{Integrantes}{Brenno Henrique Alves da Silva Costa; Gustavo Henrique Rocha Oliveira; Iasmin Vieira de Lima}
+\campo{Data}{17 de setembro de 2026}
+\campo{Repositório}{\url{https://github.com/brennohdev/mls-2026.2-desabastecimento-sus}}
+\end{tabularx}
+
+Selecionamos provisoriamente como oportunidade \textbf{principal} a previsão de risco de desabastecimento de medicamentos no SUS, e mantivemos como \textbf{alternativa} a previsão de demanda de manutenção (work orders) na Livvie. Ao longo das fichas, marcamos o que é \fato{} confirmado, o que é \hip{} suposição e o que ainda é \lac{} lacuna a validar, para não tratar hipótese como fato.
+
+% ============================================================
+\section{Oportunidade principal --- Desabastecimento de medicamentos no SUS}
+
+\begin{tabularx}{\textwidth}{@{}L X@{}}
+\toprule
+\campo{Organização e área}{Secretaria de Saúde (nível estadual, hipótese: SES-PB), setor público de assistência farmacêutica. Fonte de dados de referência: SIA/DATASUS. \hip}
+\campo{Interlocutor}{Ainda não há interlocutor nomeado. O canal provável é institucional, via coordenação de assistência farmacêutica da secretaria, com apoio do professor no contato após a triagem. \lac}
+\campo{Problema percebido}{O desabastecimento de medicamentos essenciais no SUS é descrito na literatura como problema estrutural e recorrente de saúde pública, que ultrapassa a logística (Fiocruz; Ciência \& Saúde Coletiva). O reconhecimento é institucional: a Anvisa mantém lista oficial de medicamentos em risco de desabastecimento (Res. CM-CMED 07/2022) e há projetos de lei recentes para monitorar e prever a falta (PL 1840/26; PL 1.932/2021). Em 2026, CONASS e CONASEMS relataram agravamento das faltas. Hoje, a reposição tende a ser reativa: percebe-se a falta quando o item já acabou. Ver Referências. \fato}
+\campo{Usuário e decisão}{O gestor da assistência farmacêutica. A cada fechamento mensal, ele decidiria quais itens priorizar na próxima aquisição, quando antecipar compra e o que remanejar entre unidades. \hip}
+\campo{Restrição e ação}{Orçamento fechado, prazo lento de licitação e equipe pequena para acompanhar centenas de itens. Ação possível após a previsão: antecipar compra, remanejar estoque entre unidades e alertar o prescritor. \hip}
+\campo{Unidade e população}{Unidade: medicamento $\times$ mês. População: os itens do elenco dispensados no âmbito estadual. \fato}
+\campo{Alvo e horizonte}{Alvo: risco de ruptura no mês seguinte, definido como queda abrupta da quantidade dispensada frente à média recente do próprio item (classificação sim/não). Horizonte: um mês. \fato}
+\campo{Dados necessários}{SIA/SUS, Produção Ambulatorial, grupo 06 do SIGTAP (Medicamentos). Período verificado: jan/2022 a dez/2024 (35 meses úteis). Granularidade: medicamento, competência mensal, polo. Acesso por download público (formato .dbc). \fato}
+\campo{Situação do acesso}{Dados públicos e abertos, sem necessidade de autorização. Verificamos o download e a leitura da base da Paraíba. \fato}
+\campo{Baseline atual}{Repor pela média dos últimos meses ou reagir quando o estoque zera. É a régua que o modelo precisa superar. \hip}
+\campo{Riscos e dúvidas}{Principal lacuna: a dispensação é demanda \emph{atendida}, não estoque, então uma queda pode significar ruptura de oferta ou queda de procura. Separar os dois casos, idealmente com dado de estoque da secretaria, é o que precisa ser validado. Risco ético baixo: dado agregado por medicamento, sem paciente identificado. Risco de uso indevido: cortar compras no automático confiando cegamente no modelo. \lac}
+\bottomrule
+\end{tabularx}
+
+\textit{Nota de viabilidade (verificação preliminar da equipe).} Baixamos e analisamos 35 meses reais do SIA/DATASUS (Paraíba): cerca de 208 medicamentos formam séries contínuas, a autocorrelação de um mês fica em torno de 0{,}43 na maioria dos itens (há memória para prever) e o evento de ruptura aparece em torno de 11\% dos pontos (desbalanceamento trabalhável). Isso sustenta um baseline honesto e modelos clássicos dentro do semestre.
+
+% ============================================================
+\section{Oportunidade alternativa --- Demanda de manutenção (Livvie)}
+
+\begin{tabularx}{\textwidth}{@{}L X@{}}
+\toprule
+\campo{Organização e área}{Livvie, empresa de software (SaaS) para administração, planejamento e controle de condomínios de alto padrão (Miami, EUA). \fato}
+\campo{Interlocutor}{Um integrante da equipe atua na empresa e pode intermediar a conversa interna. O uso acadêmico dos dados depende de autorização formal da empresa. \hip}
+\campo{Problema percebido}{A manutenção do condomínio costuma ser reativa: conserta-se depois que o problema aparece, o que gera fila, urgência e custo maior. As ordens de serviço já ficam registradas, com categoria e recorrência, mas o histórico não é usado para antecipar demanda. \hip}
+\campo{Usuário e decisão}{O gestor de manutenção ou o síndico. A cada mês, decidiria onde concentrar manutenção preventiva em vez de só reagir. \hip}
+\campo{Restrição e ação}{Equipe de manutenção limitada e orçamento do condomínio apertado. Ação após a previsão: programar preventiva e insumos para as áreas de maior demanda esperada. \hip}
+\campo{Unidade e população}{Unidade: área comum ou categoria de serviço $\times$ mês, por condomínio. População: os condomínios atendidos pela plataforma. \hip}
+\campo{Alvo e horizonte}{Alvo: volume (ou ocorrência) de ordens de serviço no mês seguinte. Horizonte: um mês. \hip}
+\campo{Dados necessários}{Histórico de work orders da plataforma (dezenas de milhares de registros observados), com categorização e recorrência; dados de uso do condomínio como contexto. \hip}
+\campo{Situação do acesso}{Dados proprietários. Requer autorização formal da empresa para uso acadêmico. \lac}
+\campo{Baseline atual}{Manutenção reativa, ou rotina preventiva fixa que não olha o histórico. \hip}
+\campo{Riscos e dúvidas}{Lacuna principal: confirmar o aval da empresa e o volume de chamados por área. Risco ético baixo: registros operacionais, não dados pessoais de moradores. \lac}
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Plano de dados}
+
+\textbf{Principal (medicamentos).} A obtenção já foi testada: os arquivos do SIA/SUS são baixados do repositório público do DATASUS (competências mensais por UF, formato .dbc), convertidos e filtrados pelo grupo 06 do SIGTAP. Próximos passos de dados: ampliar de uma UF para um conjunto de estados, consolidar a série medicamento $\times$ mês e definir com rigor o corte temporal (treinar até o mês $t$, prever $t+1$, sem vazamento). A lacuna a resolver é a distinção entre ruptura de oferta e queda de demanda, que depende de dado de estoque a validar na escuta.
+
+\textbf{Alternativa (Livvie).} A construção depende de exportação autorizada do histórico de work orders. Enquanto não houver aval, tratamos o volume e o formato como hipótese a confirmar.
+
+% ============================================================
+\section{Plano de contato e aproximação}
+
+Ainda não houve contato com nenhuma organização. Como a oportunidade principal se apoia em dados públicos, ela não depende de autorização para começar; o contato com a secretaria serve para validar a decisão real e a lacuna do estoque. Registramos o plano abaixo, ciente de que o contato institucional será conduzido pelo professor após a triagem, e de que não faremos promessas em nome da UFPB.
+
+\begin{tabularx}{\textwidth}{@{}>{\bfseries}p{3.3cm} X@{}}
+\toprule
+\textbf{Canal identificado} & Coordenação de assistência farmacêutica de secretaria estadual de saúde (hipótese: SES-PB); para a alternativa, contato interno na Livvie via integrante da equipe. \\ \addlinespace[2pt]
+\textbf{Responsável} & Gustavo organiza o levantamento do canal e o material de apoio ao contato para o professor; Iasmin prepara o roteiro de escuta. \\ \addlinespace[2pt]
+\textbf{Prazo} & Até a próxima etapa (escuta estruturada, Entrega 3, em 08/10/2026). \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Próximos passos}
+
+\begin{tabularx}{\textwidth}{@{}p{7.4cm} >{\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{3.2cm}@{}}
+\toprule
+\textbf{Ação} & \textbf{Responsável} & \textbf{Prazo} \\
+\midrule
+Consolidar a série medicamento $\times$ mês e o baseline inicial (código) & Brenno & 24/09 \\ \addlinespace[2pt]
+Definir a regra do alvo (limiar de ruptura) e o corte temporal, e montar o pipeline de EDA & Brenno & 26/09 \\ \addlinespace[2pt]
+Levantar o canal institucional e preparar o material de apoio ao contato (para o professor) & Gustavo & 30/09 \\ \addlinespace[2pt]
+Elaborar o roteiro de escuta e as dúvidas a validar com a secretaria & Iasmin & 26/09 \\ \addlinespace[2pt]
+Revisar riscos, LGPD e equidade da proposta & Iasmin & 01/10 \\ \addlinespace[2pt]
+Confirmar viabilidade da alternativa (aval institucional na Livvie) & Gustavo & 03/10 \\
+\bottomrule
+\end{tabularx}
+
+% ============================================================
+\section{Papéis na apresentação (verificação individual)}
+
+\begin{itemize}
+    \item \textbf{Brenno} apresenta a parte técnica: dados e acesso, a formulação como problema supervisionado (unidade, alvo, horizonte, baseline) e a verificação de viabilidade da base.
+    \item \textbf{Gustavo} apresenta o demandante e o plano de contato institucional, e conduz a oportunidade alternativa (Livvie).
+    \item \textbf{Iasmin} apresenta o problema e sua relevância, os riscos, a ética/LGPD e o plano de validação da escuta.
+\end{itemize}
+
+% ============================================================
+\section*{Uso de IA generativa}
+Declaramos o uso de um assistente de IA em dois momentos: revisão de redação deste documento e apoio técnico para montar rapidamente um script de análise exploratória (EDA) com dados abertos de saúde. As decisões de escopo, a escolha das oportunidades e a priorização são da equipe, e nenhum dado sigiloso ou pessoal foi inserido em serviço externo.
+
+% ============================================================
+\section*{Referências}
+\small
+\begin{enumerate}[leftmargin=1.4em, itemsep=1pt]
+    \item Fiocruz/ENSP. Desabastecimento de medicamentos na literatura científica da saúde. Disponível em: \url{https://www.redalyc.org/journal/4008/400859290015/}
+    \item Ciência \& Saúde Coletiva (SciELO). Desabastecimento de medicamentos: determinantes, consequências e gerenciamento. \url{https://www.scielo.br/j/csc/a/kzcSdvPjQWWmXcBHgXKxNgc/?lang=pt}
+    \item Revisão integrativa (2025). O desabastecimento de medicamentos e as iniquidades em saúde. \url{https://jmphc.emnuvens.com.br/jmphc/article/view/1459}
+    \item Anvisa. Medicamentos com risco de desabastecimento (Res. CM-CMED nº 07/2022). \url{https://www.gov.br/anvisa/pt-br/assuntos/medicamentos/cmed/risco-de-desabastecimento}
+    \item Câmara dos Deputados. PL 1840/26, plataforma para monitorar e prever falta de medicamentos. \url{https://www.camara.leg.br/noticias/1285165-projeto-cria-plataforma-para-monitorar-estoque-e-falta-de-medicamentos-no-pais}
+    \item CNN Brasil. Desabastecimento de remédios ``se agrava'', dizem entidades, CONASS e CONASEMS. \url{https://www.cnnbrasil.com.br/saude/desabastecimento-de-remedios-se-agrava-no-brasil-dizem-entidades-medicas-conass-e-conasems/}
+    \item Ministério da Saúde. Distribuição emergencial de medicamento oncológico (abr/2026). \url{https://www.gov.br/saude/pt-br/assuntos/noticias/2026/abril/ministerio-da-saude-inicia-distribuicao-emergencial-de-medicamento-oncologico-em-todo-o-pais}
+    \item Dados: Ministério da Saúde/DATASUS. Sistema de Informações Ambulatoriais (SIA/SUS), grupo 06 do SIGTAP.
+\end{enumerate}
+
+\end{document}
