@@ -62,6 +62,52 @@ def make_figures() -> list:
     return saved
 
 
+def make_model_residual_figure() -> list:
+    """Residual diagnostics for the first regression model (Deliverable 5).
+
+    Two panels on the temporal hold-out: (left) predicted vs actual with the identity
+    line; (right) residuals vs predicted. Kept honest — shows exactly where the model
+    errs relative to the per-item baseline it ties with.
+    """
+    import numpy as np
+
+    from .config import TEST_MONTHS
+    from .modeling.model import FEATURES, TARGET, build_panel, make_pipeline
+
+    ensure_dirs()
+    art = run_pipeline()
+    long, months = build_panel(art["series"])
+    test_months = months[-TEST_MONTHS:]
+    model_df = long.dropna(subset=FEATURES).copy()
+    train = model_df[~model_df["mes_inicio"].isin(test_months)]
+    test = model_df[model_df["mes_inicio"].isin(test_months)]
+    pipe = make_pipeline(); pipe.fit(train[FEATURES], train[TARGET])
+    y_pred = np.clip(pipe.predict(test[FEATURES]), 0.0, None)
+    y_true = test[TARGET].to_numpy(float)
+
+    plt.rcParams.update({"figure.dpi": 110, "font.size": 9})
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 3.6))
+
+    lim = max(y_true.max(), y_pred.max()) * 1.05
+    ax1.scatter(y_true, y_pred, color=AZUL, alpha=0.7, s=28)
+    ax1.plot([0, lim], [0, lim], color="#999", ls="--", lw=1)
+    ax1.set_xlim(0, lim); ax1.set_ylim(0, lim)
+    ax1.set_xlabel("actual demand"); ax1.set_ylabel("predicted demand")
+    ax1.set_title("Predicted vs actual (hold-out)")
+
+    ax2.scatter(y_pred, y_true - y_pred, color=LARANJA, alpha=0.7, s=28)
+    ax2.axhline(0, color="#999", ls="--", lw=1)
+    ax2.set_xlabel("predicted demand"); ax2.set_ylabel("residual (actual - pred)")
+    ax2.set_title("Residuals vs predicted")
+
+    fig.tight_layout()
+    p = FIGURES_DIR / "m1_residuos_modelo.png"
+    fig.savefig(p); plt.close()
+    return [p]
+
+
 if __name__ == "__main__":
     for p in make_figures():
+        print("saved", p)
+    for p in make_model_residual_figure():
         print("saved", p)

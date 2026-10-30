@@ -1,0 +1,64 @@
+{
+  "geocode": 2507507,
+  "municipio": "João Pessoa/PB",
+  "fontes": [
+    {
+      "name": "infodengue_dengue",
+      "url": "https://info.dengue.mat.br/api/alertcity?geocode=2507507&disease=dengue&format=json&ew_start=1&ew_end=53&ey_start=2025&ey_end=2026",
+      "ok": true,
+      "error": "",
+      "note": "95 weeks -> 23 months"
+    },
+    {
+      "name": "infodengue_chikungunya",
+      "url": "https://info.dengue.mat.br/api/alertcity?geocode=2507507&disease=chikungunya&format=json&ew_start=1&ew_end=53&ey_start=2025&ey_end=2026",
+      "ok": true,
+      "error": "",
+      "note": "95 weeks -> 23 months"
+    },
+    {
+      "name": "climate_infodengue",
+      "url": "https://info.dengue.mat.br/api/alertcity?geocode=2507507&disease=dengue&format=json&ew_start=1&ew_end=53&ey_start=2025&ey_end=2026",
+      "ok": true,
+      "error": "",
+      "note": "climate bundled in InfoDengue (JP geocode)"
+    },
+    {
+      "name": "infogripe_srag",
+      "url": "https://raw.githubusercontent.com/infogripe/Boletim_InfoGripe/main/Dados/InfoGripe/estados_e_pais_serie_estimativas_tendencia_sem_filtro_febre.csv",
+      "ok": true,
+      "error": "",
+      "note": "SRAG PB from GitHub mirror (356 weeks -> 82 months); Fiocruz GitLab down: URLError: <urlopen error timed out>"
+    },
+    {
+      "name": "inmet_A320",
+      "url": "https://apitempo.inmet.gov.br/estacao/2025-03-01/2025-03-31/A320",
+      "ok": false,
+      "error": "empty body (apitempo serves no data for this station/period without a token/portal export)",
+      "note": ""
+    }
+  ],
+  "colunas": [
+    "mes",
+    "casos_dengue",
+    "casos_est_dengue",
+    "n_semanas",
+    "tempmed",
+    "tempmin",
+    "tempmax",
+    "umidmed",
+    "umidmin",
+    "umidmax",
+    "nivel_dengue",
+    "Rt_dengue",
+    "inc100k_dengue",
+    "receptivo_dengue",
+    "transmissao_dengue",
+    "casos_chikungunya",
+    "casos_est_chikungunya",
+    "srag_casos",
+    "srag_mm",
+    "n_semanas_srag"
+  ],
+  "n_meses": 82
+}

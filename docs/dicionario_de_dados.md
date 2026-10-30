@@ -1,8 +1,8 @@
 # Dicionário de dados — base de antimicrobianos (HU-UFPB)
 
-Fonte bruta: `dados/bruto/Planilha CCIH 2026 Atualizado.xlsx`, aba `Planilha`
+Fonte bruta: `data/raw/Planilha CCIH 2026 Atualizado.xlsx`, aba `Planilha`
 ("PLANILHA DE TRATAMENTO DE PACIENTES COM ANTIMICROBIANO").
-Base processada: `dados/processado/tratamentos_antimicrobianos.parquet`.
+Base processada: `data/processed/tratamentos_antimicrobianos.parquet`.
 
 Unidade de análise: **um tratamento** de um paciente com um antimicrobiano.
 Período coberto: 2025-03 a 2026-10 (o mês 2026-10 é incompleto, coleta em 22/10).

@@ -17,6 +17,9 @@ REPO_ROOT = find_repo_root()
 DATA_DIR = REPO_ROOT / "data"
 RAW_DIR = DATA_DIR / "raw"
 PROCESSED_DIR = DATA_DIR / "processed"
+# External public data (climate / epidemiology). Unlike data/raw (hospital data,
+# never versioned), small monthly public aggregates here MAY be versioned.
+EXTERNAL_DIR = DATA_DIR / "external"
 DOCS_DIR = REPO_ROOT / "docs"
 FIGURES_DIR = DOCS_DIR / "figuras"
 
@@ -34,3 +37,4 @@ def ensure_dirs() -> None:
     """Create output directories if missing (safe to call repeatedly)."""
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+    EXTERNAL_DIR.mkdir(parents=True, exist_ok=True)
